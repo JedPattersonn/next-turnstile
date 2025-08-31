@@ -1,4 +1,8 @@
-import { TurnstileValidateOptions, TurnstileValidateResponse } from "../types";
+import {
+  TurnstileValidateOptions,
+  TurnstileValidateResponse,
+  TURNSTILE_CONSTANTS,
+} from "../types";
 
 export async function validateTurnstileToken({
   token,
@@ -7,19 +11,19 @@ export async function validateTurnstileToken({
   idempotencyKey,
   sandbox = false,
 }: TurnstileValidateOptions): Promise<TurnstileValidateResponse> {
-  const endpoint = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+  const endpoint = TURNSTILE_CONSTANTS.API_ENDPOINT;
 
   const sandboxDummyKey = () => {
     switch (sandbox) {
       case "pass":
-        return "1x0000000000000000000000000000000AA";
+        return TURNSTILE_CONSTANTS.SERVER_SANDBOX_KEYS.PASS;
       case "fail":
-        return "2x0000000000000000000000000000000AA";
+        return TURNSTILE_CONSTANTS.SERVER_SANDBOX_KEYS.FAIL;
       case "error":
-        return "3x0000000000000000000000000000000AA";
+        return TURNSTILE_CONSTANTS.SERVER_SANDBOX_KEYS.ERROR;
     }
 
-    return "1x0000000000000000000000000000000AA";
+    return TURNSTILE_CONSTANTS.SERVER_SANDBOX_KEYS.PASS;
   };
 
   const formData = new URLSearchParams({

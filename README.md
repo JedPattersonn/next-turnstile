@@ -78,28 +78,40 @@ async function validateToken(token: string) {
 
 ### Turnstile Component Props
 
-| Prop             | Type                                                                    | Default              | Description                         |
-|------------------|-------------------------------------------------------------------------|----------------------|-------------------------------------|
-| `siteKey`        | `string`                                                                | Required             | Your Cloudflare Turnstile site key  |
-| `onVerify`       | `(token: string) => void`                                               | -                    | Callback when verification succeeds |
-| `onError`        | `(error: unknown) => void`                                              | -                    | Callback when an error occurs       |
-| `onExpire`       | `() => void`                                                            | -                    | Callback when the token expires     |
-| `onLoad`         | `() => void`                                                            | -                    | Callback when the widget loads      |
-| `theme`          | `'light' \| 'dark' \| 'auto'`                                           | `'auto'`             | Widget theme                        |
-| `size`           | `'normal' \| 'compact'`                                                 | `'normal'`           | Widget size                         |
-| `appearance`     | `'always' \| 'execute' \| 'interaction-only'`                           | `'always'`           | When to show the widget             |
-| `retry`          | `'auto' \| 'never'`                                                     | `'auto'`             | Retry behavior on failure           |
-| `retryInterval`  | `number`                                                                | `8000`               | Milliseconds between retries        |
-| `refreshExpired` | `'auto' \| 'manual' \| 'never'`                                         | `'auto'`             | Token refresh behavior              |
-| `language`       | `string`                                                                | -                    | Widget language code                |
-| `id`             | `string`                                                                | `'turnstile-widget'` | Container element ID                |
-| `className`      | `string`                                                                | -                    | Additional CSS classes              |
-| `sandbox`        | `boolean` \| `pass` \| `block` \| `pass-invisible` \| `block-invisible` | `false`              | Enable sandbox mode                 |
+| Prop                  | Type                                                                    | Default                   | Description                                   |
+| --------------------- | ----------------------------------------------------------------------- | ------------------------- | --------------------------------------------- |
+| `siteKey`             | `string`                                                                | Required                  | Your Cloudflare Turnstile site key            |
+| `onVerify`            | `(token: string) => void`                                               | -                         | Callback when verification succeeds           |
+| `onError`             | `(error: unknown) => void`                                              | -                         | Callback when an error occurs                 |
+| `onExpire`            | `() => void`                                                            | -                         | Callback when the token expires               |
+| `onLoad`              | `() => void`                                                            | -                         | Callback when the widget loads                |
+| `onBeforeInteractive` | `() => void`                                                            | -                         | Callback before challenge enters interactive  |
+| `onAfterInteractive`  | `() => void`                                                            | -                         | Callback after challenge leaves interactive   |
+| `onUnsupported`       | `() => void`                                                            | -                         | Callback when browser is not supported        |
+| `onTimeout`           | `() => void`                                                            | -                         | Callback when interactive challenge times out |
+| `action`              | `string`                                                                | -                         | Custom action value for analytics             |
+| `theme`               | `'light' \| 'dark' \| 'auto'`                                           | `'auto'`                  | Widget theme                                  |
+| `size`                | `'normal' \| 'compact' \| 'flexible'`                                   | `'flexible'`              | Widget size                                   |
+| `appearance`          | `'always' \| 'execute' \| 'interaction-only'`                           | `'always'`                | When to show the widget                       |
+| `execution`           | `'render' \| 'execute'`                                                 | `'render'`                | When to execute the challenge                 |
+| `retry`               | `'auto' \| 'never'`                                                     | `'auto'`                  | Retry behavior on failure                     |
+| `retryInterval`       | `number`                                                                | `8000`                    | Milliseconds between retries                  |
+| `refreshExpired`      | `'auto' \| 'manual' \| 'never'`                                         | `'auto'`                  | Token refresh behavior                        |
+| `refreshTimeout`      | `'auto' \| 'manual' \| 'never'`                                         | `'auto'`                  | Timeout refresh behavior                      |
+| `language`            | `string`                                                                | -                         | Widget language code                          |
+| `tabIndex`            | `number`                                                                | -                         | Tab index for accessibility                   |
+| `responseField`       | `boolean`                                                               | `true`                    | Create hidden response input                  |
+| `responseFieldName`   | `string`                                                                | `'cf-turnstile-response'` | Name of the response input field              |
+| `cData`               | `string`                                                                | -                         | Custom data payload                           |
+| `feedbackEnabled`     | `boolean`                                                               | `true`                    | Enable visitor feedback collection            |
+| `id`                  | `string`                                                                | `'turnstile-widget'`      | Container element ID                          |
+| `className`           | `string`                                                                | -                         | Additional CSS classes                        |
+| `sandbox`             | `boolean` \| `pass` \| `block` \| `pass-invisible` \| `block-invisible` | `false`                   | Enable sandbox mode                           |
 
 ### Server Validation Options
 
 | Option           | Type                                    | Required | Description               |
-|------------------|-----------------------------------------|----------|---------------------------|
+| ---------------- | --------------------------------------- | -------- | ------------------------- |
 | `token`          | `string`                                | Yes      | The token from the client |
 | `secretKey`      | `string`                                | Yes      | Your Turnstile secret key |
 | `remoteip`       | `string`                                | No       | User's IP address         |

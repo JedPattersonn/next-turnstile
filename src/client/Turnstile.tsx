@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { TurnstileProps } from "../types";
+import { TurnstileProps, TURNSTILE_CONSTANTS } from "../types";
 
 declare global {
   interface Window {
     turnstile: {
+      execute: (widgetId: string, options?: any) => void;
       render: (container: string | HTMLElement, options: any) => string;
       reset: (widgetId: string) => void;
       remove: (widgetId: string) => void;
@@ -18,21 +19,28 @@ export const Turnstile: React.FC<TurnstileProps> = ({
   onError,
   onExpire,
   onLoad,
-  id = "turnstile-widget",
+  onBeforeInteractive,
+  onAfterInteractive,
+  onUnsupported,
+  onTimeout,
+  action,
+  id = TURNSTILE_CONSTANTS.DEFAULT_ID,
   className,
-  theme = "auto",
+  theme = TURNSTILE_CONSTANTS.DEFAULT_THEME,
   tabIndex,
-  responseField = true,
-  responseFieldName = "cf-turnstile-response",
-  size = "flexible",
-  retry = "auto",
-  retryInterval = 8000,
-  refreshExpired = "auto",
-  appearance = "always",
-  execution = "render",
+  responseField = TURNSTILE_CONSTANTS.DEFAULT_RESPONSE_FIELD,
+  responseFieldName = TURNSTILE_CONSTANTS.DEFAULT_RESPONSE_FIELD_NAME,
+  size = TURNSTILE_CONSTANTS.DEFAULT_SIZE,
+  retry = TURNSTILE_CONSTANTS.DEFAULT_RETRY,
+  retryInterval = TURNSTILE_CONSTANTS.DEFAULT_RETRY_INTERVAL,
+  refreshExpired = TURNSTILE_CONSTANTS.DEFAULT_REFRESH_EXPIRED,
+  refreshTimeout = TURNSTILE_CONSTANTS.DEFAULT_REFRESH_TIMEOUT,
+  appearance = TURNSTILE_CONSTANTS.DEFAULT_APPEARANCE,
+  execution = TURNSTILE_CONSTANTS.DEFAULT_EXECUTION,
   cData,
   language,
   sandbox = false,
+  feedbackEnabled = TURNSTILE_CONSTANTS.DEFAULT_FEEDBACK_ENABLED,
 }) => {
   const widgetRef = useRef<string>();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,8 +59,7 @@ export const Turnstile: React.FC<TurnstileProps> = ({
     if (!existingScript) {
       const script = document.createElement("script");
       script.id = scriptId;
-      script.src =
-        "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback";
+      script.src = `${TURNSTILE_CONSTANTS.SCRIPT_URL}?render=explicit&onload=onloadTurnstileCallback`;
       script.async = true;
       script.defer = true;
 
@@ -73,16 +80,16 @@ export const Turnstile: React.FC<TurnstileProps> = ({
   const sandboxDummyKey = () => {
     switch (sandbox) {
       case "pass":
-        return "1x00000000000000000000AA";
+        return TURNSTILE_CONSTANTS.SANDBOX_KEYS.PASS;
       case "block":
-        return "2x00000000000000000000AB";
+        return TURNSTILE_CONSTANTS.SANDBOX_KEYS.BLOCK;
       case "pass-invisible":
-        return "1x00000000000000000000BB";
+        return TURNSTILE_CONSTANTS.SANDBOX_KEYS.PASS_INVISIBLE;
       case "block-invisible":
-        return "2x00000000000000000000BB";
+        return TURNSTILE_CONSTANTS.SANDBOX_KEYS.BLOCK_INVISIBLE;
     }
 
-    return "1x00000000000000000000AA";
+    return TURNSTILE_CONSTANTS.SANDBOX_KEYS.PASS;
   };
 
   const renderWidget = () => {
@@ -92,9 +99,14 @@ export const Turnstile: React.FC<TurnstileProps> = ({
 
     widgetRef.current = window.turnstile.render(containerRef.current, {
       sitekey: sandbox ? sandboxDummyKey() : siteKey,
+      action,
       callback: onVerify,
       "error-callback": onError,
       "expired-callback": onExpire,
+      "before-interactive-callback": onBeforeInteractive,
+      "after-interactive-callback": onAfterInteractive,
+      "unsupported-callback": onUnsupported,
+      "timeout-callback": onTimeout,
       theme,
       tabindex: tabIndex,
       "response-field": responseField,
@@ -103,10 +115,12 @@ export const Turnstile: React.FC<TurnstileProps> = ({
       retry,
       "retry-interval": retryInterval,
       "refresh-expired": refreshExpired,
+      "refresh-timeout": refreshTimeout,
       appearance,
       execution,
       cdata: cData,
       language,
+      "feedback-enabled": feedbackEnabled,
     });
   };
 

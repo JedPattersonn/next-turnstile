@@ -1,6 +1,6 @@
 {
   "name": "next-turnstile",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Cloudflare Turnstile integration for Next.js applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,12 +10,28 @@
     "test": "jest",
     "lint": "eslint src/**/*.ts*"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JedPattersonn/next-turnstile.git"
+  },
+  "homepage": "https://github.com/JedPattersonn/next-turnstile",
+  "bugs": {
+    "url": "https://github.com/JedPattersonn/next-turnstile/issues"
+  },
+  "author": "Jed Patterson",
+  "contributors": [
+    "Jed Patterson <jed@jedpatterson.com>"
+  ],
   "keywords": [
     "nextjs",
     "cloudflare",
     "turnstile",
     "captcha",
-    "react"
+    "react",
+    "typescript",
+    "security",
+    "bot-protection",
+    "verification"
   ],
   "peerDependencies": {
     "next": ">=12",
