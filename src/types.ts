@@ -10,7 +10,7 @@ export interface TurnstileProps {
   tabIndex?: number;
   responseField?: boolean;
   responseFieldName?: string;
-  size?: "normal" | "compact";
+  size?: "normal" | "compact" | 'flexible';
   retry?: "auto" | "never";
   retryInterval?: number;
   refreshExpired?: "auto" | "manual" | "never";

@@ -24,7 +24,7 @@ export const Turnstile: React.FC<TurnstileProps> = ({
   tabIndex,
   responseField = true,
   responseFieldName = "cf-turnstile-response",
-  size = "normal",
+  size = "flexible",
   retry = "auto",
   retryInterval = 8000,
   refreshExpired = "auto",
